@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${portalName}">Service Provider Portal</title>
+    <!-- Use the Wix Font provided in your CSS -->
+    <link rel="stylesheet" th:href="@{/css/loader.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+</head>
+<body>
+    <div id="global-loader" class="loader-overlay hidden">
+        <div class="loader-card">
+            <div class="spinner"></div>
+            <p>Loading, please wait...</p>
+        </div>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="auth-card">
+            <div class="logo-section">
+                    <img th:src="@{/img/logo.png}" alt="UAEID Logo" class="uaeid-logo">
+                <h1 class="main-title" th:text="'Welcome to ' + ${portalName}">
+                    Welcome to Service Provider Onboarding Hub
+                </h1>
+                <p class="subtitle">Unlocking Trust, Digitally.</p>
+            </div>
+                    
+               <div class="auth-links">
+                  <a th:href="${idpUrl}" class="button-75" role="button"><span class="text">LOGIN</span></a>
+              </div>
+            </form>
+
+        </div>
+    </div>
+
+  
+    <input type="hidden" id="url" th:value="${url}">
+    <input type="hidden" id="portalUrl" th:value="${portalUrl}" />
+    <input type="hidden" id="message" th:value="${message}">
+    <input type="hidden" id="logoutUrl" th:value="${@environment.getProperty('idp.logoutUrl')}">
+    <input type="hidden" id="loginButton" th:value="${idpUrl}">
+    <script th:src="@{/js/sweetalert.js}"></script>
+    <script th:src="@{/js/loader.js}"></script>
+    <script th:src="@{/js/login.js}"></script>
+
+ 
+</body>
+
+</html>

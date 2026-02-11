@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
+              ~{::section},
+              ~{::head/link},
+              ~{::th:block[@layout:fragment='pageScripts']}
+          )}">
+
+    <head>
+        <title>My Organizations</title>
+        <link rel="stylesheet" th:href="@{/css/organizations.css}">
+    </head>
+    <section>
+        <header class="page-header page-header-actions">
+            <div class="header-left">
+                <h1>My Organizations</h1>
+                <p>View and manage registered organizations</p>
+            </div>
+
+        </header>
+        <p th:if="${organizations == null or organizations.isEmpty()}">
+            No organizations found.
+        </p>
+        <div class="establishment-list" th:if="${organizations != null and !organizations.isEmpty()}">
+            <div class="est-card" th:each="org : ${organizations}">
+                <div class="est-icon-box">
+                    <img th:src="@{/icons/buildings.svg}" style="width:22px">
+                </div>
+                <div class="est-content">
+                    <div class="est-header-row">
+                        <h3 class="est-title"
+                            th:text="${#strings.isEmpty(org.organizationName) ? 'N/A' : org.organizationName}">
+                        </h3>
+                        <span class="status-badge approved" th:if="${org.status == 'ACTIVE'}">
+                            Active
+                        </span>
+                        <span class="status-badge pending" th:if="${org.status == 'PENDING'}">
+                            Pending
+                        </span>
+                        <span class="status-badge expired" th:if="${org.status == 'REJECTED'}">
+                            Rejected
+                        </span>
+                    </div>
+                    <div class="est-meta">
+                        <div class="meta-row">
+                            <span class="meta-label">Registration Number:</span>
+                            <span class="meta-value"
+                                th:text="${org.regNo != null and !#strings.isEmpty(org.regNo) ? org.regNo : 'N/A'}">
+                            </span>
+                        </div>
+
+                        <div class="meta-row">
+                            <span class="meta-label">Organization Type:</span>
+                            <span class="meta-value"
+                                th:text="${#strings.capitalize(#strings.toLowerCase(org.orgType))}">
+                            </span>
+                        </div>
+
+                        <div class="meta-row">
+                            <span class="meta-label">Registered:</span>
+                            <span class="meta-value" th:text="${org.createdOn} ?: 'N/A'">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="est-actions">
+                        <a th:onclick="showLoader()" th:href="@{/organization-details(id=${org.organizationId})}"
+                            class="btn-primary">
+                            View Details
+                        </a>
+
+                        <a th:if="${org.status == 'ACTIVE'}" th:onclick="showLoader()"
+                            th:href="@{/available-softwares/{id}(id=${org.organizationId})}" class="btn-outline">
+                            Available Software
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="pagination" th:if="${totalPages > 1}">
+
+            <div class="page-info">
+                Page <strong th:text="${currentPage + 1}"></strong>
+                of <strong th:text="${totalPages}"></strong>
+            </div>
+
+            <div class="page-actions">
+
+                <a class="page-btn" th:if="${hasPrevious}" th:href="@{/organizations(page=${currentPage - 1})}">
+                    ‹ Prev
+                </a>
+
+                <a class="page-number" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:href="@{/organizations(page=${i})}" th:text="${i + 1}"
+                    th:classappend="${i == currentPage} ? ' active' : ''">
+                </a>
+
+                <a class="page-btn" th:if="${hasNext}" th:href="@{/organizations(page=${currentPage + 1})}">
+                    Next ›
+                </a>
+
+            </div>
+        </div>
+
+
+    </section>
+
+    <th:block layout:fragment="pageScripts"></th:block>
+
+</th:block>

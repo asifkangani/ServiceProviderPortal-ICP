@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
+              ~{::section},
+              ~{::head/link},
+              ~{::th:block[@layout:fragment='pageScripts']}
+          )}">
+
+    <head>
+        <title>Create Organization</title>
+        <link rel="stylesheet" th:href="@{/css/create-organization.css}">
+
+    </head>
+
+
+
+    <section>
+        <header class="page-header page-header-actions">
+            <div class="header-left">
+                <h1>Create New Organization</h1>
+            </div>
+        </header>
+
+      
+        <div class="stepper-wrapper">
+            <div class="stepper-item active" id="step-1-indicator">
+                <div class="step-counter">1</div>
+                <div class="step-name">Organization Info</div>
+            </div>
+            <div class="stepper-item" id="step-2-indicator">
+                <div class="step-counter">2</div>
+                <div class="step-name">Documents</div>
+            </div>
+            <div class="stepper-item" id="step-3-indicator">
+                <div class="step-counter">3</div>
+                <div class="step-name">Other Details</div>
+            </div>
+        </div>
+
+        <form id="createOrgForm" onsubmit="validateAndComplete(event)" novalidate>
+
+         
+            <div class="form-step active" id="step-1">
+                <div class="section-group">
+                    <div class="section-title">
+                        <div class="section-icon"><img th:src="@{/icons/buildings.svg}" alt="Building"
+                                style="width: 21px;"></div>
+                        Organization Details
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Organization Name <span class="required">*</span></label>
+                            <input type="text" id="orgName" class="form-input mandatory"
+                                placeholder="Enter Organization Name">
+                            <div class="error-msg">Required</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Organization Email <span class="required">*</span></label>
+                            <input type="email" id="orgEmail" class="form-input mandatory"
+                                placeholder="Enter Organization Email">
+                            <div class="error-msg">Required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Organization Type <span class="required">*</span></label>
+                            <select id="orgType" class="form-input mandatory">
+                                <option value="">Select Organization Type</option>
+                            </select>
+                            <div class="error-msg">Required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row toggle-container">
+                        <div class="form-group toggle-item">
+                            <label class="form-label">Tax Number (TAN)</label>
+                            <label class="switch">
+                                <input type="checkbox" id="taxToggle"
+                                    onchange="toggleField('taxNumberContainer', this)">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="form-group toggle-item">
+                            <label class="form-label">Unique Registered Number</label>
+                            <label class="switch">
+                                <input type="checkbox" id="regToggle" onchange="toggleField('regNoContainer', this)">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" id="taxNumberContainer" style="display:none;">
+                            <label class="form-label">Tax Number <span class="required">*</span></label>
+                            <input type="text" id="taxNumber" class="form-input" placeholder="Enter Tax Number">
+                            <div class="error-msg">Required</div>
+                        </div>
+                        <div class="form-group" id="regNoContainer" style="display:none; grid-column: 2;">
+                            <label class="form-label">Registered Number <span class="required">*</span></label>
+                            <input type="text" id="regNo" class="form-input" placeholder="Enter Registered Number">
+                            <div class="error-msg">Required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Corporate Office Address (Building, Street) <span
+                                    class="required">*</span></label>
+                            <input type="text" id="addr-building" class="form-input mandatory"
+                                placeholder="Building, Street">
+                            <div class="error-msg">Required</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Corporate Office Address (Area, City) <span
+                                    class="required">*</span></label>
+                            <input type="text" id="addr-area" class="form-input mandatory" placeholder="Area, City">
+                            <div class="error-msg">Required</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Country <span class="required">*</span></label>
+                            <select id="addr-country" class="form-input mandatory">
+                                <option value="">Select</option>
+                                <option value="uae">UAE</option>
+                            </select>
+                            <div class="error-msg">Required</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Zipcode</label>
+                            <input type="text" id="addr-zip" class="form-input" placeholder="Zipcode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        
+          
+            <div class="form-step" id="step-2">
+                <div class="section-group">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <img th:src="@{/icons/files.svg}" alt="Documents" style="width: 21px;">
+                        </div>
+                        Upload Required Documents
+                    </div>
+
+                
+                    <div id="dynamicDocumentsContainer">
+                        <div class="loading-docs" style="text-align:center; padding: 20px;">
+                            Loading document requirements...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+          
+            <div class="form-step" id="step-3">
+             
+                <div class="section-group">
+                    <div class="section-title">
+                        <div class="section-icon"><img th:src="@{/icons/user.svg}" alt="Building" style="width: 21px;">
+                        </div>
+                        SPOC Details
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" id="spoc-name" class="form-input" th:value="${spocName}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address <span class="required">*</span></label>
+                        <input type="text" id="spoc-email" class="form-input" th:value="${spocEmail}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Document Number <span class="required">*</span></label>
+                        <input type="text" id="spoc-doc" class="form-input mandatory"
+                            placeholder="Enter Document Number">
+                        <div class="error-msg">Required</div>
+                    </div>
+                </div>
+
+                <div class="section-group">
+                    <div class="section-title">
+                        <div class="section-icon"><img th:src="@{/icons/user.svg}" alt="Building" style="width: 21px;">
+                        </div>
+                        Auditor Details <span style="font-size:12px;color:#6b7280;font-weight:400;">(Optional)</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="auditor-name" class="form-input" placeholder="Enter Full Name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="auditor-email" class="form-input" placeholder="Enter Email Address">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Document Number</label>
+                        <input type="text" id="auditor-doc" class="form-input" placeholder="Enter Document Number">
+                    </div>
+                </div>
+            </div>
+
+   
+            <div class="form-navigation">
+                <button type="button" class="btn-outline" id="prevBtn" onclick="changeStep(-1)"
+                    style="display:none;">Back</button>
+                <button type="button" class="btn-primary" id="nextBtn" onclick="changeStep(1)">Next</button>
+                <button type="submit" class="btn-primary" id="submitBtn" style="display:none;">Submit
+                    Organization</button>
+            </div>
+
+            <input type="hidden" id="MAX_PDF_SIZE_KB" th:value="${fileSize}" />
+            <input type="hidden" id="portalUrl" th:value="${portalUrl}" />
+        </form>
+    </section>
+
+  <th:block layout:fragment="pageScripts">
+    <script th:inline="javascript">
+      
+        window.iconPaths = {
+            checkCircle: /*[[@{/icons/check-circle.svg}]]*/ '/icons/check-circle.svg',
+            files: /*[[@{/icons/files.svg}]]*/ '/icons/files.svg',
+            uploadCloud: /*[[@{/icons/upload-cloud.svg}]]*/ '/icons/upload-cloud.svg'
+        };
+    </script>
+    <script th:src="@{/js/sweetalert.js}"></script>
+    <script th:src="@{/js/create-organization.js}"></script>
+</th:block>
+
+
+
+</html>

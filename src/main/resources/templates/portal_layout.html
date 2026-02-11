@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="layout(content, pageCss, pageScripts)">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Service Provider Portal</title>
+        <link th:href="@{/assets/css/fonts.css}" rel="stylesheet">
+        <link th:href="@{/css/loader.css}" rel="stylesheet">
+        <link th:href="@{/css/styles.css}" rel="stylesheet">
+        <link th:href="@{/css/portal_layout.css}" rel="stylesheet">
+
+
+        <th:block th:if="${pageCss != null}" th:replace="${pageCss}"></th:block>
+    </head>
+
+    <body>
+
+        <div class="app-container">
+
+            <div id="global-loader" class="loader-overlay hidden">
+                <div class="loader-card">
+                    <div class="spinner"></div>
+                    <p>Loading, please wait...</p>
+                </div>
+            </div>
+
+
+            <header class="navbar">
+                <div class="navbar-container">
+
+                    <div class="brand">
+                        <div class="logo-container">
+                          
+
+                            <img th:src="@{/img/dt.png}" class="section-icon-img" alt="UAEID Logo">
+
+                        </div>
+                        <h1 class="brand-title" th:text="${portalName}"></h1>
+                    </div>
+
+
+                    <nav class="nav-menu">
+                        <a th:onclick="showLoader()" th:href="@{/dashboard}" class="nav-item"
+                            th:classappend="${activePage == 'dashboard'} ? 'active' : ''">
+                            <img th:src="@{/icons/squares-four.svg}" style="width:20px">
+                            <span>Dashboard</span>
+                        </a>
+
+                        <a th:onclick="showLoader()" th:href="@{/organizations}" class="nav-item"
+                            th:classappend="${activePage == 'organizations'} ? 'active' : ''">
+                            <img th:src="@{/icons/buildings.svg}" style="width:20px">
+                            <span>Organizations</span>
+                        </a>
+
+
+                        <a th:onclick="showLoader()" th:href="@{/create-organization}" class="nav-item"
+                            th:classappend="${activePage == 'create-organization'} ? 'active' : ''">
+                            <img th:src="@{/icons/plus-circle.svg}" style="width:20px">
+                            <span>New Application</span>
+                        </a>
+                    </nav>
+
+
+                    <div class="navbar-right">
+                        <div class="user-profile">
+                            <div class="user-info">
+                                <span class="user-name" th:text="${userName}"></span>
+                                <span class="user-email" th:text="${userEmail}"></span>
+                            </div>
+                        </div>
+
+
+                     
+                        <div class="profile-dropdown">
+                            <button class="profile-btn" type="button" onclick="toggleProfileMenu(event)">
+                                <img th:src="@{/icons/user.svg}" style="width:18px">
+                            </button>
+
+                            <div class="dropdown-menu" id="profileMenu">
+
+                                
+
+                                <a th:href="${@environment.getProperty('idp.logoutUrl')}" class="dropdown-item"
+                                    style="color:#dc2626; display:flex; align-items:center; gap:6px;">
+                                    <img th:src="@{/icons/sign-out.svg}" style="width:16px">
+                                    <span>Logout</span>
+                                </a>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </header>
+
+
+            <div class="content-wrapper">
+                <main class="main-content">
+                    <th:block th:replace="${content}"></th:block>
+                </main>
+            </div>
+            <footer class="app-footer">
+                <div class="footer-right">
+                    <img th:src="@{/img/footer_logo.png}" alt="Portal Logo" class="footer-logo">
+                </div>
+            </footer>
+        </div>
+
+        <form id="logoutForm" th:action="@{/logout}" method="post"></form>
+
+
+        <script th:src="@{/js/loader.js}"></script>
+
+        <th:block th:if="${pageScripts != null}" th:replace="${pageScripts}">
+        </th:block>
+
+    </body>
+</th:block>
+
+</html>

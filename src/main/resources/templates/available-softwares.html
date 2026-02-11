@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
+              ~{::section},
+              ~{::head/link},
+              ~{::th:block[@layout:fragment='pageScripts']}
+          )}">
+
+    <head>
+        <title>Available Software</title>
+        <link rel="stylesheet" th:href="@{/css/available-softwares.css}">
+
+
+    </head>
+
+
+
+    <section>
+
+        <a th:onclick="showLoader()" th:href="@{/organizations}" class="back-link">
+            <img th:src="@{/icons/arrow-left.svg}" alt="Building" style="width: 16.6px;
+    margin-top: 2px;">Back to Organizations
+        </a>
+
+        <header class="page-header">
+            <h1>Softwares</h1>
+            
+
+            <p th:if="${!noSoftwares}">
+                Download software and apply for license
+            </p>
+
+            <p th:if="${noSoftwares}" style="color:#dc2626; font-weight:600;">
+                No softwares found
+            </p>
+        </header>
+
+        <div class="software-grid" th:if="${!noSoftwares}">
+
+            <div class="soft-card" th:each="card : ${softwares}">
+
+              
+                <div class="soft-header">
+                    <div class="soft-icon-box">
+                        <img th:src="@{/icons/file-text.svg}" alt="Building">
+                    </div>
+
+                    <span class="license-badge none" th:if="${card.licenceStatus == 'NONE'}">NO LICENSE</span>
+
+                    <span class="license-badge active" th:if="${card.licenceStatus == 'ACTIVE'}">ACTIVE</span>
+
+                    <span class="license-badge pending" th:if="${card.licenceStatus == 'APPLIED'}">APPLIED</span>
+
+                    <span class="license-badge expired" th:if="${card.licenceStatus == 'EXPIRED'}">EXPIRED</span>
+                </div>
+
+               
+                <div class="soft-info">
+                    <div class="soft-row">
+                        <span class="soft-label">Organization:</span>
+                        <span class="soft-value" th:text="${card.orgName}"></span>
+                    </div>
+
+                    <div class="soft-row">
+                        <span class="soft-label">Software:</span>
+                        <span class="soft-value" th:text="${card.softwareName}"></span>
+                    </div>
+
+                    <div class="soft-row">
+                        <span class="soft-label">Version:</span>
+                        <span class="soft-value" th:text="${card.softwareVersion}"></span>
+                    </div>
+                </div>
+
+                <div class="soft-divider"></div>
+
+             
+                <div class="soft-meta">
+                    <div class="soft-meta-row">
+                        <span class="soft-meta-label">License Type:</span>
+                        <span class="soft-meta-value" th:text="${card.licenseType != null ? card.licenseType : 'N/A'}">
+                        </span>
+                    </div>
+
+                    <div class="soft-meta-row">
+                        <span class="soft-meta-label">Valid Upto:</span>
+                        <span class="soft-meta-value" th:text="${card.validUpTo != null ? card.validUpTo : 'N/A'}">
+                        </span>
+                    </div>
+                </div>
+
+              
+                <div class="soft-actions">
+
+                    <a class="btn-primary" th:href="@{/download/software/by/softwareId/{id}(id=${card.softwareId})}">
+                        Download Software
+                    </a>
+
+                  
+                    <button class="btn-outline" th:if="${card.licenceStatus == 'NONE'}"
+                        th:data-software-id="${card.softwareId}" th:data-org-id="${organizationId}"
+                        onclick="confirmApplyLicense(this)">
+                        Apply License
+                    </button>
+
+                  
+                    <a class="btn-outline" th:if="${card.licenceStatus == 'ACTIVE'}" th:href="@{/license/download/{ouid}/{licenseType}(
+                    ouid=${card.ouid},
+                    licenseType=${card.licenseType}
+               )}">
+                        Download License
+                    </a>
+
+                  
+                    <button class="btn-outline" th:if="${card.licenceStatus == 'APPLIED'}" disabled>
+                        License Pending Approval
+                    </button>
+
+
+
+                    <button class="btn-outline" th:if="${card.licenceStatus == 'EXPIRED'}"
+                        th:data-software-id="${card.softwareId}" th:data-org-id="${organizationId}"
+                        onclick="confirmApplyLicense(this)">
+                        Renew License
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+    </section>
+
+    <th:block layout:fragment="pageScripts">
+        <script th:src="@{/js/sweetalert.js}"></script>
+        <script th:src="@{/js/avaliable-softwares.js}"></script>
+
+        <script th:inline="javascript">
+            const portalUrl = /*[[${portalUrl}]]*/ '';
+        </script>
+    </th:block>
+
+</th:block>
+
+</html>

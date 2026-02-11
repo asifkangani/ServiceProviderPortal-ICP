@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
+              ~{::section},
+              ~{::head/link},
+              ~{::th:block[@layout:fragment='pageScripts']}
+          )}">
+
+    <head>
+        <title>Dashboard</title>
+        <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    </head>
+    <header class="page-header">
+        <h1 th:text="'Welcome ' + (${userName} ?: 'User')">Welcome User</h1>
+        <p>Manage your organizations and applications from your dashboard</p>
+    </header>
+
+    <section class="stats-grid">
+        <a th:href="@{/organizations}" th:onclick="showLoader()" style="text-decoration:none;">
+            <div class="card stat-card-new">
+                <div class="stat-info">
+                    <span class="card-label">Total Applications</span>
+                    <div class="stat-value" th:text="${details.totalApplications}">0</div>
+                </div>
+                <div class="icon-box-bg blue">
+                    <img th:src="@{/icons/file-text.svg}" style="width: 20px;">
+                </div>
+            </div>
+        </a>
+
+        <a th:href="@{/organizations}" th:onclick="showLoader()" style="text-decoration:none;">
+            <div class="card stat-card-new">
+                <div class="stat-info">
+                    <span class="card-label">Pending Applications</span>
+                    <div class="stat-value" th:text="${details.pendingApplications}">0</div>
+                </div>
+
+
+                <div class="icon-box-bg green">
+                    <img th:src="@{/icons/clock.svg}" style="width: 20px;">
+                </div>
+            </div>
+        </a>
+
+        <a th:href="@{/organizations}" th:onclick="showLoader()" style="text-decoration:none;">
+            <div class="card stat-card-new">
+                <div class="stat-info">
+                    <span class="card-label">Total Organizations</span>
+                    <div class="stat-value" th:text="${details.totalOrganizations}">0</div>
+                </div>
+                <div class="icon-box-bg purple">
+                    <img th:src="@{/icons/buildings.svg}" style="width: 20px;">
+                </div>
+            </div>
+        </a>
+
+    </section>
+
+    <section class="content-split">
+        <div class="card action-panel">
+            <div class="panel-icon-bg">
+                <img th:src="@{/icons/buildings.svg}" style="width: 22px;">
+            </div>
+            <h3>Organizations</h3>
+            <p>View and manage your registered organizations</p>
+            <a th:onclick="showLoader()" th:href="@{/organizations}" class="btn-primary">
+                Manage Organizations
+            </a>
+        </div>
+        <div class="card application-status-card" th:if="${recentOrg != null}">
+            <div class="status-header">
+                <h3>Recent Application Status</h3>
+                <div th:class="'status-badge ' + ${recentOrg.status.toLowerCase()}">
+                    <span th:text="${recentOrg.status}">PENDING</span>
+                </div>
+            </div>
+
+            <div class="status-content">
+                <div class="status-grid">
+                    <div class="detail-item">
+                        <label>Organization Name</label>
+                        <p th:text="${recentOrg.orgName} ?: 'N/A'">N/A</p>
+                    </div>
+                    <div class="detail-item text-left">
+                        <label>Type</label>
+                        <p th:text="${recentOrg.orgType} ?: 'N/A'">N/A</p>
+                    </div>
+                    <div class="detail-item">
+                        <label>Tax No.</label>
+                        <p th:text="${recentOrg.taxNumber} ?: 'N/A'">N/A</p>
+                    </div>
+
+                    <div class="detail-item text-left">
+                        <label>Registration No.</label>
+                        <p th:text="${recentOrg.regNo} ?: 'N/A'">N/A</p>
+                    </div>
+                   
+                    <div class="detail-item">
+                        <label>Creation Date</label>
+                        <p th:text="${recentOrg.createdOn} ?: 'N/A'">N/A</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <th:block layout:fragment="pageScripts"></th:block>
+
+</th:block>

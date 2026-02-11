@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<th:block xmlns:th="http://www.thymeleaf.org" th:replace="~{portal_layout :: layout(
+              ~{::section},
+              ~{::head/link},
+              ~{::th:block[@layout:fragment='pageScripts']}
+          )}">
+
+    <head>
+        <title>Organization Details</title>
+        <link rel="stylesheet" th:href="@{/css/organization-details.css}">
+
+    </head>
+    <section>
+
+        <a th:onclick="showLoader()" th:href="@{/organizations}" class="back-link">
+            <img th:src="@{/icons/arrow-left.svg}" alt="Building" style="width: 16.6px;
+    margin-top: 2px;"> Back to Organizations
+        </a>
+
+        <div class="details-grid">
+            <div>
+                <div class="card">
+                    <div class="header-row">
+                        <div class="header-left">
+                            <div class="icon-box"><img th:src="@{/icons/buildings.svg}" alt="Building"
+                                    style="width: 21px;"></i></div>
+                            <div>
+                                <h2 th:text="${#strings.capitalize(#strings.toLowerCase(org.orgName))}"></h2>
+                                <p class="subtitle" th:text="${#strings.capitalize(#strings.toLowerCase(org.orgType))}">
+                                </p>
+                            </div>
+                        </div>
+
+                        <span class="status-badge approved" th:if="${org.status == 'ACTIVE'}">
+                            <img th:src="@{/icons/check-circle.svg}" alt="Building" style="width: 13.6px;">Active
+                        </span>
+
+                        <span class="status-badge pending" th:if="${org.status == 'PENDING'}">
+                            <img th:src="@{/icons/clock.svg}" alt="Building" style="width: 13.6px;"> Pending
+                        </span>
+
+                        <span class="status-badge expired" th:if="${org.status == 'REJECTED'}">
+                            <img th:src="@{/icons/x-circle.svg}" alt="Building" style="width: 13.6px;"> Rejected
+                        </span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Registration No</span>
+                            <span class="info-value"
+                                th:text="${org.orgNo != null and org.orgNo != '' ? org.orgNo : 'N/A'}"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Tax Number</span>
+                            <span class="info-value"
+                                th:text="${org.taxNumber != null and org.taxNumber != '' ? org.taxNumber : 'N/A'}"></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Organization Email</span>
+                            <span class="info-value"
+                                th:text="${org.orgEmail != null and org.orgEmail != '' ? org.orgEmail : 'N/A'}"></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Corporate Office Address (Building, Street)</span>
+                            <span class="info-value" th:text="${org.address != null 
+                                 and org.address.split(';').length > 0 
+                                and org.address.split(';')[0] != '' 
+                                ? org.address.split(';')[0].trim() 
+                                : 'N/A'}">
+                            </span>
+                        </div>
+
+
+                        <div class="info-item">
+                            <span class="info-label">Corporate Office Address (Area, City)</span>
+                            <span class="info-value" th:text="${org.address != null 
+                                and org.address.split(';').length > 1 
+                                and org.address.split(';')[1] != '' 
+                                ? org.address.split(';')[1].trim() 
+                                : 'N/A'}">
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Country</span>
+                            <span class="info-value" th:text="${org.address != null 
+                                and org.address.split(';').length > 2 
+                                and org.address.split(';')[2] != '' 
+                                ? org.address.split(';')[2].trim() 
+                                : 'N/A'}">
+                            </span>
+                        </div>
+
+
+                        <div class="info-item">
+                            <span class="info-label">Zipcode</span>
+                            <span class="info-value" th:text="${org.address == null 
+                                or org.address.split(';').length <= 3 
+                                or #strings.isEmpty(#strings.trim(org.address.split(';')[3])) 
+                                ? 'N/A' 
+                                : org.address.split(';')[3].trim()}">
+                            </span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Created On</span>
+                            <span class="info-value" th:text="${org.createdOn != null ? org.createdOn : 'N/A'}"></span>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <h3>SPOC Details</h3>
+                    <div class="divider"></div>
+
+                    <div class="info-grid" th:if="${not #strings.isEmpty(org.spocOfficialEmail)}">
+
+                        <div class="info-item">
+                            <span class="info-label">Name</span>
+                            <span class="info-value" th:text="${not #strings.isEmpty(org.spocName)
+                  ? #strings.capitalize(#strings.toLowerCase(org.spocName))
+                  : 'N/A'}"></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Email</span>
+                            <span class="info-value" th:text="${org.spocOfficialEmail != null ? org.spocOfficialEmail : 'N/A'}"></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Document Number</span>
+                            <span class="info-value" th:text="${not #strings.isEmpty(org.spocDocumentNumber)
+                  ? org.spocDocumentNumber
+                  : 'N/A'}"></span>
+                        </div>
+
+                    </div>
+
+                    <p class="subtitle" th:if="${#strings.isEmpty(org.spocOfficialEmail)}">
+                        SPOC not added
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>Financial Auditor</h3>
+                    <div class="divider"></div>
+
+
+                    <div class="info-grid" th:if="${not #strings.isEmpty(org.auditorName) or
+                 not #strings.isEmpty(org.auditorOfficialEmail) or
+                 not #strings.isEmpty(org.auditorDocumentNumber)}">
+
+                        <div class="info-item">
+                            <span class="info-label">Auditor Name</span>
+
+                            <span class="info-value" th:text="${not #strings.isEmpty(org.auditorName) ?
+                          #strings.capitalize(#strings.toLowerCase(org.auditorName)) : 'N/A'}"></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Official Email</span>
+
+                            <span class="info-value"
+                                th:text="${not #strings.isEmpty(org.auditorOfficialEmail) ? org.auditorOfficialEmail : 'N/A'}"></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Document Number</span>
+                            <span class="info-value"
+                                th:text="${not #strings.isEmpty(org.auditorDocumentNumber) ? org.auditorDocumentNumber : 'N/A'}"></span>
+                        </div>
+                    </div>
+
+
+                    <p class="subtitle" th:if="${#strings.isEmpty(org.auditorName) and
+               #strings.isEmpty(org.auditorOfficialEmail) and
+               #strings.isEmpty(org.auditorDocumentNumber)}">
+                        Financial auditor not added
+                    </p>
+                </div>
+
+
+
+                <div class="card" th:if="${walletDetails != null and walletDetails.status != 'NOT_FOUND'}">
+                    <h3>Wallet Details</h3>
+                    <div class="divider"></div>
+
+
+                    <p class="subtitle" th:if="${walletDetails.status == 'PENDING'}">
+                        Wallet certificate request has been sent to admin.
+                        Waiting for approval.
+                    </p>
+
+
+                    <p class="subtitle" th:if="${walletDetails.status == 'REJECTED'}">
+                        Wallet certificate has been rejected by admin.
+                    </p>
+
+
+
+
+
+                    <div class="info-grid" th:if="${walletDetails.status == 'ACTIVE'}">
+
+                        <div class="info-item">
+                            <span class="info-label">Certificate Issue Date</span>
+                            <span class="info-value" th:text="${walletDetails.certificateIssueDate}"></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Certificate Expiry Date</span>
+                            <span class="info-value" th:text="${walletDetails.certificateExpiryDate}"></span>
+                        </div>
+                    </div>
+
+                    <div class="info-grid" th:if="${walletDetails.status == 'EXPIRED'}">
+                        <div class="info-item">
+                            <span class="info-label">Certificate Issue Date</span>
+                            <span class="info-value" th:text="${walletDetails.certificateIssueDate}"></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Certificate Expiry Date</span>
+                            <span class="info-value" th:text="${walletDetails.certificateExpiryDate}"></span>
+                        </div>
+
+                        <p class="subtitle">
+                            Wallet certificate request has been expired.
+                            Please Renew wallet Certificate.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="card" th:if="${org.status == 'ACTIVE'}">
+                    <h3>Quick Actions</h3>
+
+                    <div class="btn-stack">
+                        <a th:onclick="showLoader()" class="btn-primary"
+                            th:href="@{/available-softwares/{id}(id=${org.orgDetailsId})}">
+                            View Available Software
+                        </a>
+
+                        <a th:onclick="showLoader()" class="btn-outline"
+                            th:href="@{/available-softwares/{id}(id=${org.orgDetailsId})}">
+                            View Licenses
+                        </a>
+
+
+                        <a th:if="${walletCert 
+    and (walletDetails == null or walletDetails.status == 'NOT_FOUND')}" href="javascript:void(0)" class="btn-outline"
+                            th:attr="data-org-id=${org.orgDetailsId},
+            data-direct=${walletCertAdminApproval}" onclick="confirmApplyWallet(this)">
+                            Apply Wallet Certificate
+                        </a>
+
+
+                        <a th:if="${walletCert 
+    and (walletDetails.status == 'EXPIRED')}" href="javascript:void(0)" class="btn-outline" th:attr="data-org-id=${org.orgDetailsId},
+            data-direct=${walletCertAdminApproval}, data-status=${walletDetails.status}"
+                            onclick="confirmApplyWallet(this)">
+                            Renew Wallet Certificate
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <th:block layout:fragment="pageScripts">
+        <script th:src="@{/js/sweetalert.js}"></script>
+        <script th:src="@{/js/wallet.js}"></script>
+
+        <script th:inline="javascript">
+            const portalUrl = /*[[${portalUrl}]]*/ '';
+        </script>
+    </th:block>
+
+
+</th:block>

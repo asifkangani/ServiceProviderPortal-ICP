@@ -1,0 +1,26 @@
+:root {
+    /* --primary-color: #986f2f;
+    --primary-hover: #157a92;
+    --border-color: #e5e7eb;
+    --text-muted: #64748b;
+    --bg-page: #f8fafc; */
+
+    --primary-color: #986f2f ;
+    --primary-hover: #c9933be8;
+    --hover-shadow: #FFF8EE;
+    --border-color: #e5e7eb;
+    --text-muted: #64748b;
+    --bg-page: #f8fafc;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--primary-color);
+}
