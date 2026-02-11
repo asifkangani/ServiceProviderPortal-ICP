@@ -67,6 +67,10 @@ dependencies {
         exclude group: 'org.slf4j', module: 'slf4j-api'
     }
 
+    // Version constraint for transitive dependency to fix security vulnerability
+    constraints {
+        implementation 'io.netty:netty-codec:4.1.125.Final'
+    }
 
 }
 
