@@ -70,6 +70,7 @@ dependencies {
     // Version constraint for transitive dependency to fix security vulnerability
     constraints {
         implementation 'io.netty:netty-codec:4.1.125.Final'
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
     }
 
 }
