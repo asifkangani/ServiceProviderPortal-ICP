@@ -71,6 +71,7 @@ dependencies {
     constraints {
         implementation 'io.netty:netty-codec:4.1.125.Final'
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
+        implementation 'com.fasterxml.jackson.core:jackson-core:2.15.0'
     }
 
 }
