@@ -16,6 +16,9 @@ java {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://maven.aikido.io/10208d27b7450ebb66734fd62ddad868fe041'
+    }
 }
 
 dependencies {
@@ -49,7 +52,7 @@ dependencies {
     implementation 'org.springframework.vault:spring-vault-core'
 
 
-    implementation group: 'org.json', name: 'json', version: '20090211'
+    implementation group: 'org.json', name: 'json', version: '20090211-tuxcare.3'
 
     implementation('com.auth0:jwks-rsa:0.21.2') {
         exclude group: 'org.slf4j', module: 'slf4j-api'
