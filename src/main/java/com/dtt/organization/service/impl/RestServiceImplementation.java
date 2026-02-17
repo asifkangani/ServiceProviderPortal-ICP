@@ -101,7 +101,7 @@ public class RestServiceImplementation implements RestService {
             String signedToken = generateJwtToken(privateKey, VALIDITY_IN_MILLISECONDS,id, claims);
             return signedToken;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return null;
         }
     }
@@ -126,7 +126,7 @@ public class RestServiceImplementation implements RestService {
             String token = builder.compact();
             return token;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return null;
         }
     }
@@ -143,7 +143,7 @@ public class RestServiceImplementation implements RestService {
             PrivateKey _privateKey = kf.generatePrivate(keySpec);
             return _privateKey;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return null;
         }
     }
@@ -242,7 +242,7 @@ public class RestServiceImplementation implements RestService {
                             }
                             return userInfo;
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error("Unexpected exception", e);
 
                         }
                     }
@@ -280,7 +280,7 @@ public class RestServiceImplementation implements RestService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
         }
         return null;
     }

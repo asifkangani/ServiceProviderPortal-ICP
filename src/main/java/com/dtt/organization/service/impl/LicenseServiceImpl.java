@@ -142,7 +142,7 @@ public class LicenseServiceImpl implements LicenseService {
 
         } catch (Exception e) {
             logger.error("{} applyLicense() failed | orgId={} | exception={}", CLASS, orgId, e.getMessage(), e);
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false, "Something went wrong", null);
         }
 

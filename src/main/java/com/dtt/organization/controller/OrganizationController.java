@@ -64,6 +64,7 @@ public ApiResponse save(
             return new ApiResponse(true, "Fetched successfully", list);
 
         } catch (Exception e) {
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false, "Failed to fetch meta documents", e.getMessage());
         }
     }

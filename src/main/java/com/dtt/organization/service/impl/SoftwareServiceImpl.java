@@ -125,7 +125,7 @@ public class SoftwareServiceImpl implements SoftwareService {
             return new ApiResponse(true,"Software status updated successfully", null);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something wemt wrong",null);
         }
     }
@@ -165,7 +165,7 @@ public ApiResponse getAllSoftwares() {
         return new ApiResponse(true, "Software list fetched", response);
 
     } catch (Exception e) {
-        e.printStackTrace();
+        logger.error("Unexpected exception", e);
         return new ApiResponse(false, "Something went wrong", null);
     }
 }
@@ -305,7 +305,7 @@ public ApiResponse getAllSoftwares() {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
 
@@ -398,7 +398,7 @@ public ApiResponse getAllSoftwares() {
 
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something went wrong",null);
 
         }

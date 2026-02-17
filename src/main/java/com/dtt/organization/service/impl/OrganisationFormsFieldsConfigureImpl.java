@@ -37,7 +37,7 @@ public class OrganisationFormsFieldsConfigureImpl
             );
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false, "Something went wrong", null);
         }
     }

@@ -83,7 +83,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
 
             return new ApiResponse (true, "Login successful", null);
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something went wrong",null);
 
         }
@@ -148,7 +148,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
 
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something went wrong",null);
         }
     }
@@ -177,7 +177,7 @@ public class TrustedUserServiceImpl implements TrustedUserService {
             return new ApiResponse(true,"Trusted user saved successfully",trustedUsersRepository.findAll());
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something went wrong",null);
         }
     }

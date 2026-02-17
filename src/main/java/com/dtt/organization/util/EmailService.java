@@ -1,7 +1,10 @@
 package com.dtt.organization.util;
 
 
+import com.dtt.organization.controller.OrganizationController;
 import com.dtt.organization.dto.EmailDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,10 @@ import java.util.List;
 
 @Service
 public class EmailService {
+
+    private static final String CLASS = "EmailService";
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
+
     @Value("${send.email.url}")
     private String sendEmail;
 
@@ -157,13 +164,13 @@ public class EmailService {
                 return new ApiResponse(false, "Error Fetching Emails", res.getBody().getResult());
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false, "Error Fetching Emails", e.getMessage());
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false, "Unexpected Error Occurred", e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false, "Unknown Error Occurred", e.getMessage());
         }
     }

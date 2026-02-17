@@ -72,7 +72,7 @@ public class WalletImpl implements WalletIface {
             return response;
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something went wrong",null);
         }
     }
@@ -112,7 +112,7 @@ public class WalletImpl implements WalletIface {
             }
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something went wrong",null);
         }
     }
@@ -141,7 +141,7 @@ public class WalletImpl implements WalletIface {
             return new ApiResponse(true,"Fetched Successfully",walletCertRequestsRepo.findAll());
 
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something went wrong",null);
         }
     }
@@ -171,7 +171,7 @@ public class WalletImpl implements WalletIface {
 
 
         }catch(Exception e){
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false,"Something went wrong",null);
 
         }
@@ -282,7 +282,7 @@ public class WalletImpl implements WalletIface {
             return fetchWalletCertificateByOuid(organization.getOuid());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unexpected exception", e);
             return new ApiResponse(false, "Something went wrong", null);
         }
     }
