@@ -8,12 +8,18 @@ import com.dtt.organization.repository.PasswordResetTokenRepository;
 import com.dtt.organization.repository.TrustedUsersRepository;
 import com.dtt.organization.repository.SpocRepository;
 import com.dtt.organization.service.iface.TrustedUserService;
+import com.dtt.organization.util.APIRequestHandler;
 import com.dtt.organization.util.ApiResponse;
 import com.dtt.organization.util.AppUtil;
 import com.dtt.organization.util.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +44,12 @@ public class TrustedUserServiceImpl implements TrustedUserService {
 
     @Value("${portal.name}")
     private String portalName;
+
+    @Value("${spoc.details}")
+    String spocDetails;
+
+    @Autowired
+    APIRequestHandler apiRequestHandler;
 
 
     public TrustedUserServiceImpl(
@@ -90,15 +102,43 @@ public class TrustedUserServiceImpl implements TrustedUserService {
     }
 
 
-
-
-
     public ApiResponse saveTrustedUser(TrustedUserDTO trustedUserDTO) {
         logger.info("{} save trust user :::" ,CLASS);
-        try{
-            TrustedUsersEntity trustedUsersEntity = trustedUsersRepository.findByEmail(trustedUserDTO.getEmail());
-            if(trustedUsersEntity!=null){
-                return new ApiResponse(false,"This user is already added as Trusted User",null);
+        try {
+            TrustedUsersEntity trustedUsersEntity =
+                    trustedUsersRepository.findByEmail(trustedUserDTO.getEmail());
+
+            if (trustedUsersEntity != null) {
+                return new ApiResponse(
+                        false,
+                        "This user is already added as Trusted User",
+                        null
+                );
+            }
+
+            String url = spocDetails + trustedUserDTO.getEmail();
+            logger.info(CLASS + " fetching user details by calling {} ", url);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+
+            ApiResponse spocResponse =
+                    apiRequestHandler.handleApiRequest(
+                            url,
+                            HttpMethod.GET,
+                            requestEntity
+                    );
+
+            if (spocResponse == null || !spocResponse.isSuccess()) {
+                logger.warn("{} Email not found in SPOC details ::: {}",
+                        CLASS, trustedUserDTO.getEmail());
+
+                return new ApiResponse(
+                        false,
+                        "User is not available in SPOC details. Cannot add as Trusted User",
+                        null
+                );
             }
 
             TrustedUsersEntity trustedUsers = new TrustedUsersEntity();
@@ -139,11 +179,11 @@ public class TrustedUserServiceImpl implements TrustedUserService {
                             "</html>";
 
 
-
+            trustedUsersRepository.save(trustedUsers);
             emailService.sendEmail(trustedUserDTO.getEmail(),  body,"Added as Trusted User " + portalName);
 
 
-            trustedUsersRepository.save(trustedUsers);
+
             return new ApiResponse(true,"Trusted user saved successfully",null);
 
 

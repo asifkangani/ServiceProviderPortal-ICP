@@ -504,3 +504,9 @@ input:checked + .slider:before { transform: translateX(22px); }
     color: #374151;
     font-weight: 500;
 }
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}

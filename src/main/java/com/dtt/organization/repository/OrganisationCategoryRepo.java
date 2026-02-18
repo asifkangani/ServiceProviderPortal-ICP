@@ -10,4 +10,15 @@ public interface OrganisationCategoryRepo
         extends JpaRepository<OrganisationCategories, Integer> {
 
     Optional<OrganisationCategories> findByCategoryName(String categoryName);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE OrganisationCategories c " +
+            "SET c.labelName = :labelName, c.updatedOn = :updatedOn " +
+            "WHERE c.id = :id")
+    int updateLabelNameById(
+            @Param("id") int id,
+            @Param("labelName") String labelName,
+            @Param("updatedOn") String updatedOn
+    );
 }

@@ -7,5 +7,5 @@ public interface OrganisationFormsFieldsConfigureIface {
 
 
     ApiResponse getAllCategories();
-
+    ApiResponse updateCategoryLabel(Integer id, String labelName);
 }

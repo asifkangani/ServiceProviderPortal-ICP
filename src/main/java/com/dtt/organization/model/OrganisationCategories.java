@@ -20,6 +20,12 @@ public class OrganisationCategories {
     @Column(name = "label_name")
     private String labelName;
 
+    @Column(name = "created_on")
+    private String createdOn;
+
+    @Column(name = "updated_on")
+    private String updatedOn;
+
     public int getId() {
         return id;
     }
@@ -44,12 +50,30 @@ public class OrganisationCategories {
         this.labelName = labelName;
     }
 
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(String updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
     @Override
     public String toString() {
         return "OrganisationCategories{" +
                 "id=" + id +
                 ", categoryName='" + categoryName + '\'' +
                 ", labelName='" + labelName + '\'' +
+                ", createdOn='" + createdOn + '\'' +
+                ", updatedOn='" + updatedOn + '\'' +
                 '}';
     }
 }
